@@ -20,6 +20,14 @@ pipeline {
             }
         }
 
+        stage('Install Docker') {
+            steps {
+                script {
+                    sh 'apt-get update && apt-get install -y docker.io'
+                }
+            }
+        }
+
         stage('Build Application') {
             steps {
                 // Construire l'application Spring Boot avec Maven
