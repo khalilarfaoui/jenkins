@@ -13,17 +13,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Ensure .m2 directory exists
-        run: mkdir -p ~/.m2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'  # Remplacez 'adoptopenjdk' par 'temurin'
 
-      - name: Write Maven settings from secret
-        run: echo "${{ secrets.MAVEN_SETTINGS }}" > ~/.m2/settings.xml
-
-      - name: Verify settings.xml content
-        run: cat ~/.m2/settings.xml
+      # Caching des dépendances Maven pour accélérer les builds
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Deploy to Nexus
         run: mvn clean deploy
-        env:
-          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
