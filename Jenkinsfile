@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://sonarqube:9000'  // Remplacez par l'URL de votre serveur SonarQube
+        SONARQUBE_URL = 'http://localhost:9000'  // Remplacez par l'URL de votre serveur SonarQube
         SONARQUBE_TOKEN = credentials('sonarqube-key')  // Utilisez les credentials de Jenkins pour gérer votre token SonarQube
     }
 
