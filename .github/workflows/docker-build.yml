@@ -24,11 +24,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'  # Remplacez 'adoptopenjdk' par 'temurin'
 
-      - name: Set up Maven
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          maven-version: '3.8.1'
+
 
       # Étape 3 : Build du projet Maven
       - name: Build with Maven
