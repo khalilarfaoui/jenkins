@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adoptopenjdk'
+          distribution: 'temurin'  # Remplacez 'adoptopenjdk' par 'temurin'
 
       - name: Set up Maven
         uses: actions/setup-java@v2
