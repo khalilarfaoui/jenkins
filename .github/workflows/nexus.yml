@@ -1,0 +1,25 @@
+name: Deploy to Nexus
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Maven
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Deploy to Nexus
+        run: mvn clean deploy
+        env:
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
