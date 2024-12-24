@@ -28,7 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
-
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.projectKey>testtesttest123</sonar.projectKey>
+		<sonar.organization>devops</sonar.organization>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,6 +55,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.0.2155</version> <!-- Assurez-vous d'utiliser la dernière version -->
 			</plugin>
 
 		</plugins>

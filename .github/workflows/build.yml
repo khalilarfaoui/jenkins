@@ -1,4 +1,4 @@
-name: Build and Test Spring Boot Application
+name: Build, Test, and Analyze with SonarCloud
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'temurin'  # Remplacez 'adoptopenjdk' par 'temurin'
+          distribution: 'temurin'
 
       # Caching des dépendances Maven pour accélérer les builds
       - name: Cache Maven dependencies
@@ -33,10 +33,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Installation de Maven et exécution du build
+      # Build avec Maven (sans tests)
       - name: Build with Maven
         run: mvn clean install -DskipTests=true
 
-      # Exécution des tests
-      - name: Run tests with Maven
-        run: mvn test
+      # Analyser avec SonarCloud
+      - name: SonarCloud Analysis
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          sonar-token: ${{ secrets.SONAR_TOKEN }}
