@@ -1,9 +1,8 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE = "springboot-app"
-        DOCKER_TAG = "latest"
+    tools {
+        maven 'Maven 3'  // This matches the name you set in the Global Tool Configuration
     }
 
     stages {
@@ -13,28 +12,33 @@ pipeline {
             }
         }
 
-
-
-        stage('Build Application') {
+        stage('Build') {
             steps {
-                script {
-                    // Utilisation de PowerShell pour appeler WSL et construire l'application
-                    powershell '''
-                        wsl mvn clean package -DskipTests
-                    '''
-                }
+                sh 'mvn clean install'  // Jenkins will use the configured Maven installation here
             }
         }
 
- 
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+
+
     }
 
     post {
         success {
-            echo 'Docker image built and container running successfully!'
+            echo 'Déploiement réussi sur le VPS (local) !'
         }
         failure {
-            echo 'Deployment failed. Please check the logs for more details.'
+            echo 'Le déploiement a échoué.'
         }
     }
 }
