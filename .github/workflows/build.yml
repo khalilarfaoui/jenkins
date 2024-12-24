@@ -40,5 +40,5 @@ jobs:
       # Analyser avec SonarCloud
       - name: SonarCloud Analysis
         uses: sonarsource/sonarcloud-github-action@v1
-        with:
-          sonar-token: ${{ secrets.SONAR_TOKEN }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Définir SONAR_TOKEN comme une variable d'environnement
