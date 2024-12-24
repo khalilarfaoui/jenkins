@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3'  // This matches the name you set in the Global Tool Configuration
+        maven 'Maven 3'  // Assurez-vous que Maven est bien configuré dans la section "Global Tool Configuration"
     }
 
     environment {
@@ -23,6 +23,7 @@ pipeline {
                 sh 'mvn clean package -DskipTests'
             }
         }
+
         stage('Docker Build') {
             steps {
                 script {
@@ -33,6 +34,7 @@ pipeline {
                 }
             }
         }
+
         stage('Push to Docker Hub') {
             steps {
                 script {
@@ -42,8 +44,6 @@ pipeline {
                 }
             }
         }
-
-
     }
 
     post {
