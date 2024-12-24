@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'  // Remplacez par l'URL de votre serveur SonarQube
-        SONARQUBE_TOKEN = credentials('sonarqube-key')  // Utilisez les credentials de Jenkins pour gérer votre token SonarQube
+        SONARQUBE = 'SonarQube'  // Nom de la configuration SonarQube dans Jenkins
+        MAVEN_HOME = tool name: 'M3', type: 'Maven'  // Use the configured Maven tool
     }
 
     stages {
@@ -15,46 +15,34 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
+                script {
+                    // Print Maven version and home to check the setup
+                    sh 'echo "Maven Home: $MAVEN_HOME"'
+                    sh "'${MAVEN_HOME}/bin/mvn' --version"
+                    // Build the project using Maven
+                    sh "'${MAVEN_HOME}/bin/mvn' clean install"
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Lancer l'analyse SonarQube
-                    sh '''
-                    mvn sonar:sonar \
-                        -Dsonar.host.url=$SONARQUBE_URL \
-                        -Dsonar.login=$SONARQUBE_TOKEN
-                    '''
+                    // Run SonarQube analysis
+                    withSonarQubeEnv(SONARQUBE) {
+                        sh "'${MAVEN_HOME}/bin/mvn' sonar:sonar"
+                    }
                 }
             }
         }
 
-        stage('Package') {
+        stage('Quality Gate') {
             steps {
-                sh 'mvn package'
+                script {
+                    // Wait for and check the quality gate
+                    waitForQualityGate abortPipeline: true
+                }
             }
-        }
-
-
-
-
-    }
-
-    post {
-        success {
-            echo 'Déploiement réussi sur le VPS (local) !'
-        }
-        failure {
-            echo 'Le déploiement a échoué.'
         }
     }
 }
