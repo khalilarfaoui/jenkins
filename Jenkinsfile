@@ -23,7 +23,13 @@ pipeline {
         stage('Install Docker') {
             steps {
                 script {
-                    sh 'apt-get update && apt-get install -y docker.io'
+                    // Vérifier si Docker est déjà installé sur Windows
+                    def dockerInstalled = bat(script: 'docker --version', returnStatus: true) == 0
+                    if (!dockerInstalled) {
+                        echo "Docker is not installed, installing Docker Desktop..."
+                        // Télécharger et installer Docker Desktop (c'est un processus manuel habituellement)
+                        bat 'Start-Process -Wait "https://desktop.docker.com"'
+                    }
                 }
             }
         }
@@ -32,7 +38,7 @@ pipeline {
             steps {
                 // Construire l'application Spring Boot avec Maven
                 echo 'Building the Spring Boot application...'
-                sh 'mvn clean package -DskipTests'
+                bat 'mvn clean package -DskipTests'
             }
         }
 
@@ -41,7 +47,7 @@ pipeline {
                 script {
                     // Construire l'image Docker
                     echo 'Building the Docker image...'
-                    sh """
+                    bat """
                     docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
                     """
                 }
@@ -53,7 +59,7 @@ pipeline {
                 script {
                     // Arrêter et supprimer tout conteneur existant, puis en démarrer un nouveau
                     echo 'Running the Docker container on port 8081...'
-                    sh """
+                    bat """
                     docker stop springboot-container || true
                     docker rm springboot-container || true
                     docker run -d --name springboot-container -p 8081:8080 ${DOCKER_IMAGE}:${DOCKER_TAG}
