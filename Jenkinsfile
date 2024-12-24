@@ -3,8 +3,7 @@ pipeline {
 
     environment {
         SONARQUBE = 'SonarQube'  // Nom de la configuration SonarQube dans Jenkins
-        MAVEN_HOME = tool name: 'M3', type: 'Maven'
-
+        MAVEN_HOME = tool name: 'M3', type: 'Maven'  // Use the configured Maven tool
     }
 
     stages {
@@ -17,7 +16,10 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Utiliser Maven pour construire le projet
+                    // Print Maven version and home to check the setup
+                    sh 'echo "Maven Home: $MAVEN_HOME"'
+                    sh "'${MAVEN_HOME}/bin/mvn' --version"
+                    // Build the project using Maven
                     sh "'${MAVEN_HOME}/bin/mvn' clean install"
                 }
             }
@@ -26,7 +28,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Exécuter l'analyse SonarQube
+                    // Run SonarQube analysis
                     withSonarQubeEnv(SONARQUBE) {
                         sh "'${MAVEN_HOME}/bin/mvn' sonar:sonar"
                     }
@@ -37,7 +39,7 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-                    // Attendre et vérifier la qualité du code
+                    // Wait for and check the quality gate
                     waitForQualityGate abortPipeline: true
                 }
             }
