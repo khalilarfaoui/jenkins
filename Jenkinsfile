@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven 3'  // This matches the name you set in the Global Tool Configuration
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,7 +14,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean install'  // Jenkins will use the configured Maven installation here
             }
         }
 
@@ -26,7 +30,11 @@ pipeline {
             }
         }
 
-
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t my-spring-boot-app:latest .'
+            }
+        }
     }
 
     post {
