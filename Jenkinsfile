@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/khalilarfaoui/jenkins-spirng-boot-bankapp.git', branch: 'main'
+                git url: 'https://github.com/khalilarfaoui/jenkins.git', branch: 'main'
             }
         }
 
@@ -26,7 +26,7 @@ pipeline {
             }
         }
 
-     
+
     }
 
     post {
