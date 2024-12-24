@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'SonarQube'  // Nom de la configuration SonarQube dans Jenkins
-        MAVEN_HOME = tool name: 'M3', type: 'Maven'  // Use the configured Maven tool
+        SONARQUBE = 'SonarQube'  // SonarQube configuration name
+        MAVEN_HOME = tool name: 'M3', type: 'Maven'  // Ensure 'M3' is the correct tool name
     }
 
     stages {
@@ -16,7 +16,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Print Maven version and home to check the setup
+                    // Print Maven version and home to verify setup
                     sh 'echo "Maven Home: $MAVEN_HOME"'
                     sh "'${MAVEN_HOME}/bin/mvn' --version"
                     // Build the project using Maven
