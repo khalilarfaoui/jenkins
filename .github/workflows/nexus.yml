@@ -13,10 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Copy Maven settings
-        run: |
-          mkdir -p ~/.m2
-          cp .github/maven/settings.xml ~/.m2/settings.xml
+      - name: Ensure .m2 directory exists
+        run: mkdir -p ~/.m2
+
+      - name: Write Maven settings from secret
+        run: echo "${{ secrets.MAVEN_SETTINGS }}" > ~/.m2/settings.xml
+
+      - name: Verify settings.xml content
+        run: cat ~/.m2/settings.xml
 
       - name: Deploy to Nexus
         run: mvn clean deploy
