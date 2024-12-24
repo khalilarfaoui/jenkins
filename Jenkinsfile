@@ -4,12 +4,13 @@ pipeline {
     environment {
         SONARQUBE = 'SonarQube'  // Nom de la configuration SonarQube dans Jenkins
         MAVEN_HOME = tool name: 'M3', type: 'Maven'
+
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/khalilarfaoui/jenkins.git'
+                git url: 'https://github.com/khalilarfaoui/jenkins.git', branch: 'main'
             }
         }
 
