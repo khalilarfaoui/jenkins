@@ -9,12 +9,17 @@ on:
       - main
 
 jobs:
-  docker-version:
+  maven-build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Check Docker version
-        run: docker --version
+      - name: Install Maven
+        run: sudo apt-get install maven
+
+      - name: Nexus Deploy
+        run: |
+          cd C:/Users/MSI/Desktop/devops/jenkins
+          mvn clean deploy
