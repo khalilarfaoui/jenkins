@@ -1,25 +1,22 @@
-name: Build and Deploy to Nexus
+name: Deploy to Nexus
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  maven-build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Maven
-        run: sudo apt-get install maven
+      - name: Set up Maven
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
 
-      - name: Nexus Deploy
-        run: |
-          cd C:/Users/MSI/Desktop/devops/jenkins
-          mvn clean deploy
+      - name: Deploy to Nexus
+        run: mvn clean
