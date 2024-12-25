@@ -20,7 +20,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'  # Remplacez 'adoptopenjdk' par 'temurin'
 
-      - name: Cache SonarCloud dependencies
+      - name: Cache Nexus dependencies
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
